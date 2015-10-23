@@ -30,7 +30,7 @@ a = 0.1;
 g = 9.81;
 
 % Initial Conditions
-x0 = [23 * pi / 180; 0.2; 0; 0];
+x0 = [22 * pi / 180; 0.2; 0; 0];
 
 % W matrix, given in handout
 W = [I1 + I2 + m2 * (y^2 + r^2) m2 * r + I2 / a; m2 * r + I2 / a m2 + I2 / a^2];
@@ -125,6 +125,8 @@ end
 fig=figure('DeleteFcn',@closefigfcn);
 axs=axes('Parent',fig);
 
+fill([-0.5, 0.5, 0], [-1, -1, 0],'g','Parent',axs);
+
 beamLength = 2;
 ball = rectangle('Position',[(x0(2) - a / 2) (-x0(2) * sin(x0(1))) (2 * a) (2 * a)],...
                  'FaceColor','b',...
@@ -149,6 +151,7 @@ for i = 1:400
    
    beam.XData = [-beamLength / 2 * cos(output(1, index)), beamLength / 2 * cos(output(1, index))];
    beam.YData = [beamLength / 2 * sin(output(1, index)), -beamLength / 2 * sin(output(1, index))];
+
    axis(axs, [-1.5, 1.5, -0.5, 0.5]);
    drawnow;
    pause(0.04 - toc(startTime))
