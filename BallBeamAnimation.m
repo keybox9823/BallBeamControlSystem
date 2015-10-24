@@ -30,7 +30,9 @@ a = 0.1;
 g = 9.81;
 
 % Initial Conditions
-x0 = [22 * pi / 180; 0.2; 0; 0];
+x0 = [-22 * pi / 180; 0.9; 0; 0];
+x0(1) = input('Enter starting angle (deg): ') * pi / 180;
+x0(2) = input('Enter starting position (m): ');
 
 % W matrix, given in handout
 W = [I1 + I2 + m2 * (y^2 + r^2) m2 * r + I2 / a; m2 * r + I2 / a m2 + I2 / a^2];
@@ -85,13 +87,11 @@ catch
     K = [ 3.6844157929226736566186107470511, 20.512584097859327217125382262997, 1.3826382699868938401048492791612, 1.7673165137614678899082568807339]
 end
 
-% defining our time matrix
-t = [0:0.01:16];
-
 % allocate space for an output matrix, four rows, 1600 columns
 % output = zeros(4, 1600);
-uVal = 0;
 
+uVal = 0;
+    
 for i = 1:1600
     
     % if this is the start, use values defined outside of for loop
@@ -103,6 +103,11 @@ for i = 1:1600
         x = x0;
     end
     
+    if i == 2
+        legend('Angle (rad)','Distance (m)');
+        legend('show');
+    end
+    
     % Runge Kutte algorithm, see handout
     z1 = calcZ(x, uVal);
     z2 = calcZ(x + z1 / 2, uVal);
@@ -111,12 +116,17 @@ for i = 1:1600
     
     % Determine output value and assign to current position in output
     % matrix
+    t(:,i) = 0.01 * i;
     output(:,i) = (z1 + 2 * z3 + 2 * z3 + z4) / 6 + x;
 
     
     % Continuously update plot at each point
-    plot(output(2,:));
-    xlim([0 1600]);
+    
+    plot(t(:), output(1,:), 'r');hold on;
+    plot(t(:), output(2,:), 'b');
+    
+    %plot(output(1,:));
+    %xlim([0 1600]);
     
     drawnow;
 end
@@ -125,11 +135,11 @@ end
 fig=figure('DeleteFcn',@closefigfcn);
 axs=axes('Parent',fig);
 
-fill([-0.5, 0.5, 0], [-1, -1, 0],'g','Parent',axs);
+fill([-0.5, 0.5, 0], [-1, -1, 0],'b','Parent',axs);
 
 beamLength = 2;
 ball = rectangle('Position',[(x0(2) - a / 2) (-x0(2) * sin(x0(1))) (2 * a) (2 * a)],...
-                 'FaceColor','b',...
+                 'FaceColor','r',...
                  'Curvature',[1, 1],...
                  'Parent',axs...
                  );
@@ -139,6 +149,7 @@ beam = line([beamLength / 2 * cos(x0(1)), -beamLength / 2 * cos(x0(1))], [-beamL
    );
 axis(axs, [-1.5, 1.5, -0.5, 0.5]);
 axis(axs, 'equal');
+
 drawnow;
 
 
@@ -153,6 +164,11 @@ for i = 1:400
    beam.YData = [beamLength / 2 * sin(output(1, index)), -beamLength / 2 * sin(output(1, index))];
 
    axis(axs, [-1.5, 1.5, -0.5, 0.5]);
+   
+   if i > 1
+       delete(h);
+   end
+   h = text(-1.25, -0.35, {strcat('Angle (deg): ', num2str(round(output(1, index) * 180 / pi, 3))), strcat('Distance (m): ', num2str(round(output(2, index), 3)))}); 
    drawnow;
    pause(0.04 - toc(startTime))
 end
