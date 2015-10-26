@@ -107,7 +107,6 @@ for i = 1:1600
        u = -K * x;
     else
         x = x0;
-        u = 0;
     end
     
     theta = x(1);
@@ -116,6 +115,7 @@ for i = 1:1600
     ydot = x(4);
    
     % Runge Kutte algorithm, see handout
+    % z1 = calcZ(x, uVal);
     z1 = double([xdot1(thetadot);...
                  xdot2(ydot);...
                  xdot3(thetadot, theta, u, y, ydot);...
@@ -149,6 +149,9 @@ legend('show');
 xlim([0 16]);
     
 drawnow;
+
+endTime = toc(startTime);
+disp(endTime)
 
 %% 
 
