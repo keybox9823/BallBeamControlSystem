@@ -188,7 +188,7 @@ for i = 1:400
    if i > 1
        delete(h);
    end
-   h = text(-1.25, -0.35, {strcat('Angle (deg): ', num2str(round(output(1, index) * 180 / pi, 3))), strcat('Distance (m): ', num2str(round(output(2, index), 3)))}); 
+   h = text(-1.25, -0.35, {strcat('Angle (deg): ', num2str(round(output(1, index) * 180 / pi, 3))), strcat('Distance (m): ', num2str(round(output(2, index), 3))), strcat('Time (s): ', num2str(t(index)))}); 
    drawnow;
    pause(0.04 - toc(startTime))
 end
