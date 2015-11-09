@@ -15,8 +15,7 @@
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-% Record keeping code for how long it takes to simulate (deprecated)
+% initial setup
 clear global
 clearvars
 
